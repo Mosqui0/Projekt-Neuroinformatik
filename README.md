@@ -1,2 +1,2 @@
 # Projekt-Neuroinformatik
-Thema: Classificatio nof American sign-language using Hidden Markov Models or Convolutional Neural Networks.
+Thema: Classification of American sign-language using Hidden Markov Models or Convolutional Neural Networks.
