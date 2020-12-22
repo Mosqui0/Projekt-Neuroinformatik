@@ -1,0 +1,11 @@
+Meeting 22.12.20:
+ - Nicht zu viele Daten verwenden, als Input für das 2. Modell die seg. Bilder.
+	-> dann Bewegung tracken
+
+ - Mehrere Korpora schwierig, hier erst mal nur auf die Bewegung klassifizieren
+	konzentrieren und dann die Hand Pose dazu
+	
+Nächste Schritte:
+ - Model DeconvNet/SegNet für die Hand-Segmentation trainieren (oder das in HandSeg
+	paper vorgestelltem Modell)
+ - Erste Klassen anhand der Bewegungen klassifizieren
