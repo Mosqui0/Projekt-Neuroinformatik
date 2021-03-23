@@ -13,6 +13,8 @@ IMAGE_AUGMENTATION_NUM_TRIES = 10
 
 loaded_augmentation_name = ""
 
+# here
+print(ia.__version__)
 
 def _load_augmentation_aug_geometric():
     return iaa.OneOf([

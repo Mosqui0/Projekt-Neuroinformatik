@@ -1,4 +1,5 @@
 # created own model based on the proposed model in HandSeg
+from tensorflow.keras.layers import Conv2D, BatchNormalization, ReLU, LeakyReLU, Softmax, Add, Conv2DTranspose, Dense, Reshape, concatenate
 
 # three classes: background: 0, right_hand: 1, left_hand: 2
 def handseg_model(input_layer, num_classes=3):
