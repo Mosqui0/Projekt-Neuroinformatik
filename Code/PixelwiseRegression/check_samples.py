@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from utils import draw_skeleton_torch
 
 if __name__ == "__main__":
+    #Load Data from command
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, default='MSRA', 
         help="choose from MSRA, ICVL, NYU, HAND17"    
@@ -24,8 +25,10 @@ if __name__ == "__main__":
         using_rotation=args.using_rotation, using_scale=args.using_scale, 
         using_shift=args.using_shift, using_flip=args.using_flip)
 
+    #DataLoader: take arguments to load the required dataset in batches
     loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True)
 
+    #for every batch loaded, load the image
     for batch in iter(loader):
         if args.set == 'test':
             img, label_img, mask, box_size, cube_size, com = batch
