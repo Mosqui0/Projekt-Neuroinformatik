@@ -43,10 +43,20 @@ def drawBoxes(mask, img):
 
 # preprocessing
 def preprocess(img):
+    # preprocessing for HandSeg dataset
     return (img / img.max()) * 255
 	
 def preprocess2(img):
-    img = img - img.min()
+    # preprocessing for ICVL dataset
+    #img = img - img.min()
     #img = img.max() - img
-    img = tf.where(img == 4, 0, img).numpy()
+    #img = tf.where(img == 4, 0, img).numpy()
+    img = tf.where(img > 1, img[0,0,0], img).numpy()
+    return img
+    
+def preprocess3(img):
+    # preprocessing for fingerspelling dataset
+    img = tf.where(img > 25, 255, img).numpy()
+    img = tf.where(img < 25, 50, img).numpy()
+    img = tf.where(img == 255, 125, img).numpy()
     return img
