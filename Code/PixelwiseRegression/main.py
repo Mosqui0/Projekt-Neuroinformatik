@@ -12,8 +12,7 @@ from model import PixelwiseRegression
 from classifyASL import *
 from test_samples import draw_skeleton
 
-if __name__ == '__main__':
-
+def loadModel():
     #Model Parameter
     joint_number=16
     
@@ -136,28 +135,34 @@ if __name__ == '__main__':
     results = model(img, label_img, mask)
 
     _heatmaps, _depthmaps, _uvd = results[-1]
-    #print("UVD SHApe: {}".format(_uvd.shape))
     _uvd = _uvd.detach().cpu().numpy()
     img = img.cpu().numpy()
-    #uvd = uvd.numpy()
+    printPrediction(_uvd)
     
-    ''' Predicts the ASL sign '''
+''' transforms uvd to xyz format'''
+def uvdtoXYZ(_uvd):
     #Denormalize the Uv coordinates
     joints44 = _uvd[0,:,:2] * (512 - 1) + np.array([512 // 2, 512 // 2])
     #convert to xy or int? coordinates
     _joint44 = [(int(joints44[i][0]), int(joints44[i][1])) for i in range(joints44.shape[0])]
+    return _joint44
+    
+''' Predicts the ASL sign '''
+def printPrediction(_uvd):
+    _joint44 = uvdtoXYZ(_uvd)
     palmRadius = calcPalm(_joint44)
     fingers = fingerStretched(_joint44, palmRadius)
     prediction = classifyHandSign(fingers)
     print("Prediction: ", prediction)
-    ''' -----------------------'''   
+    return 
     
+def drawSkeleton(img, _uvd):
     #Draw Skeleton
     #print(xyz_pre)
     skeleton_pre, xyz_pre = draw_skeleton(img[0,0], _uvd[0,:,:2], skeleton_mode=0)
     skeleton_pre = np.clip(skeleton_pre, 0, 1) 
-
-
+    
+    #print skeleton of prediction
     cv2.imshow("predict", skeleton_pre)
     cv2.moveWindow("predict", 50,50)
 
@@ -169,8 +174,6 @@ if __name__ == '__main__':
         index += 1
     elif ch == ord('q'):
         ...
-
-
 
 
 
