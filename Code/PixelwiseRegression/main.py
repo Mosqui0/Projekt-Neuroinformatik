@@ -19,7 +19,7 @@ if __name__ == '__main__':
     
     model_parameters = {
         "stage" : 2, 
-        "label_size" : 64, 
+        "label_size" : 64,
         "features" : 128, 
         "level" : 4,
         "norm_method" : 'instance',
