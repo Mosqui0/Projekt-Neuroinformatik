@@ -1,7 +1,7 @@
 import torch
 from torch.functional import F
 
-from utils import generate_com_filter, xavier_weights_init
+from PixelwiseRegression.utils import generate_com_filter, xavier_weights_init
 
 class ResBlock(torch.nn.Module):
     def __init__(self, features, kernel_size=3, norm=torch.nn.BatchNorm2d, inplace=True):

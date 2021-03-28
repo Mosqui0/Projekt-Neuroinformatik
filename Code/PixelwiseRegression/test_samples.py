@@ -6,10 +6,10 @@ import os, argparse
 from tqdm import tqdm
 import cv2
 
-from model import PixelwiseRegression
-import datasets
-from utils import load_model, recover_uvd, select_gpus
-from classifyASL import *
+from PixelwiseRegression.model import PixelwiseRegression
+import PixelwiseRegression.datasets
+from PixelwiseRegression.utils import load_model, recover_uvd, select_gpus
+from PixelwiseRegression.classifyASL import *
 
 def draw_skeleton(_img, joints, *, output_size=512, rP = 8, linewidth = 4, draw=False, skeleton_mode=0):
     fig, axes = plt.subplots(figsize=(4, 4))

@@ -48,9 +48,6 @@ def preprocess(img):
 	
 def preprocess2(img):
     # preprocessing for ICVL dataset
-    #img = img - img.min()
-    #img = img.max() - img
-    #img = tf.where(img == 4, 0, img).numpy()
     img = tf.where(img > 1, img[0,0,0], img).numpy()
     return img
     

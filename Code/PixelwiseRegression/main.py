@@ -6,13 +6,13 @@ import cv2
 import os, random, time, struct, re
 import math
 
-from utils import load_bin, load_model, draw_skeleton, select_gpus, center_crop, \
+from PixelwiseRegression.utils import load_bin, load_model, draw_skeleton, select_gpus, center_crop, \
     generate_com_filter, floodFillDepth, generate_heatmap, random_rotated, generate_kernel
-from model import PixelwiseRegression
-from classifyASL import *
-from test_samples import draw_skeleton
+from PixelwiseRegression.model import PixelwiseRegression
+from PixelwiseRegression.classifyASL import *
+from PixelwiseRegression.test_samples import draw_skeleton
 
-def loadModel():
+def loadModel(imgSource):
     #Model Parameter
     joint_number=16
     
@@ -40,13 +40,13 @@ def loadModel():
     model = PixelwiseRegression(joint_number, **model_parameters)
     model_name = "ICVL_default_46.pt"
     #model_name = "ICVL_default_final"
-    load_model(model, os.path.join('Model', model_name), eval_mode=True)
+    load_model(model, os.path.join('PixelwiseRegression/Model', model_name), eval_mode=True)
     model = model.to(device)
 
 
     #Load image
     #img = cv2.imread("./Data/ICVL/image_0001.png")
-    imgSource = plt.imread("./Data/ICVL/image_0001.png")
+    #imgSource = plt.imread("./PixelwiseRegression/Data/ICVL/image_0001.png")
 
     img = imgSource*65535
     cube_size=125
@@ -57,7 +57,7 @@ def loadModel():
     #mean without extreme high values like background or nan
     mean = np.mean(img[img < 10000])
     #TODO Is this mean calculation valid over more than this example?
-    print("Mean without backgruond", mean)
+    #print("Mean without backgruond", mean)
     #calc com (source: datasets 209)
     if math.isnan(np.mean(img[img < 0])):
         mean = np.mean(img[img < mean])
@@ -67,21 +67,21 @@ def loadModel():
     #mean = 360.554
     _com = center_of_mass(img > 0)
     _com = np.array([_com[1], _com[0], mean])
-    print("_com ", _com)
+    #print("_com ", _com)
     image = img.copy()
-    print("Image shape before crop", image.shape)
+    #print("Image shape before crop", image.shape)
     com = _com.copy()
 
     # crop the image
     du = cube_size / com[2] * fx
     dv = cube_size / com[2] * fy
     box_size = int(du + dv)
-    print("BoxSize int: ", box_size)
+    #print("BoxSize int: ", box_size)
     box_size = max(box_size, 2)
-    print("BoxSize maxxed: ", box_size)
+    #print("BoxSize maxxed: ", box_size)
     crop_img = center_crop(image, (com[1], com[0]), box_size)
     crop_img = crop_img * np.logical_and(crop_img > com[2] - cube_size, crop_img < com[2] + cube_size)
-    print("Image shape after crop", crop_img.shape)
+    #print("Image shape after crop", crop_img.shape)
     # norm the image and uvd to COM
     crop_img[crop_img > 0] -= com[2] # center the depth image to COM
 
@@ -92,7 +92,7 @@ def loadModel():
     # resize the image and uvd
     try:
         img_resize = cv2.resize(crop_img, (image_size, image_size))
-        print("imgresizedshape: ", img_resize.shape)
+        #print("imgresizedshape: ", img_resize.shape)
     except:
         # probably because size is zero
         print("resize error")
@@ -100,7 +100,7 @@ def loadModel():
 
     # Generate label_image and mask
     label_image = cv2.resize(img_resize, (label_size, label_size))
-    print("label_image: ", label_image.shape)
+    #print("label_image: ", label_image.shape)
     is_hand = label_image != 0
     mask = is_hand.astype(float)
     
@@ -111,15 +111,15 @@ def loadModel():
     
     
     # Convert to torch format
-    print(normalized_img.shape)
+    #print(normalized_img.shape)
     normalized_img = torch.from_numpy(normalized_img).float().unsqueeze(0)
-    print(normalized_img.shape)
+    #print(normalized_img.shape)
     normalized_label_img = torch.from_numpy(normalized_label_img).float().unsqueeze(0)
     mask = torch.from_numpy(mask).float().unsqueeze(0)
     box_size = torch.tensor(box_size).float()
     cube_size = torch.tensor(cube_size).float()
     com = torch.from_numpy(com).float()
-    print("img: {}, label_img: {}, mask: {}".format(normalized_img.shape, normalized_label_img.shape, mask.shape))
+    #print("img: {}, label_img: {}, mask: {}".format(normalized_img.shape, normalized_label_img.shape, mask.shape))
     #return normalized_img, normalized_label_img, mask, box_size, cube_size, com
     
     #load model
@@ -138,7 +138,8 @@ def loadModel():
     _uvd = _uvd.detach().cpu().numpy()
     img = img.cpu().numpy()
     printPrediction(_uvd)
-    
+    drawSkeleton(img, _uvd)
+
 ''' transforms uvd to xyz format'''
 def uvdtoXYZ(_uvd):
     #Denormalize the Uv coordinates

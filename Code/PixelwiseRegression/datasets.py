@@ -11,7 +11,7 @@ import os, random, time, struct, re
 from tqdm import tqdm
 import multiprocessing as mp
 
-from utils import load_bin, draw_skeleton, center_crop, \
+from PixelwiseRegression.utils import load_bin, draw_skeleton, center_crop, \
     generate_com_filter, floodFillDepth, generate_heatmap, random_rotated, generate_kernel
 
 @ray.remote

@@ -3,7 +3,7 @@ import datasets
 import torch, torchvision
 import matplotlib.pyplot as plt
 
-from utils import draw_skeleton_torch
+from PixelwiseRegression.utils import draw_skeleton_torch
 
 if __name__ == "__main__":
     #Load Data from command

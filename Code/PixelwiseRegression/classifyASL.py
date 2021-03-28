@@ -26,7 +26,7 @@
 
 import numpy as np
 import math
-from test_samples import draw_skeleton
+from PixelwiseRegression.test_samples import draw_skeleton
 
 def calcPalm(results):
     #TODO Mindestradius
