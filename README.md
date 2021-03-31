@@ -1,10 +1,10 @@
 # Projekt-Neuroinformatik
 
-## Proejct structure
-###Related_Work:
+## Project structure
+### Related_Work:
 Contains some papers as PDF used in our documentation as related work.
 
-###Code:
+### Code:
 The jupyter notebook model.ipynb contains the build pipeline of our proposed model. Please note that in order to use this pipeline,
 the necessary data have to be located in parent directory from root of this repository.
 
