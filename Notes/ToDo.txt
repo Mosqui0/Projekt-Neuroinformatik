@@ -1,7 +1,0 @@
-To-Do:
- - Handerkennung nach Related Work suchen
- - Arbeitsplan erstellen
- - SSH in GIT einrichten
-
-LSTM und Keras reinarbeiten
-Regel. dokumentieren/Related Work
